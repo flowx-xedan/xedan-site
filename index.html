@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FLOWX Lite - XEDAN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="FLOWX Lite من XEDAN: برنامج مخازن ومبيعات وحسابات لتاجر الجملة، بيشتغل على جهازك من غير إنترنت.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout concept: a wholesaler's ledger. A real-looking invoice (cartons, split payment) leads the page; sections read like entries in a daybook. Navy and gold are the app's own colors. */
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#0E1A2B; --muted:#586477; --line:#DCE0E7;
+  --gold:#B8862F; --gold-ink:#7A560F; --gold-soft:#F3E8D0;
+  --btn-bg:#0E1A2B; --btn-fg:#FFFFFF;
+  --band:#0E1A2B; --band-ink:#E9EDF3; --band-muted:#A5B0C0; --band-line:#26364F; --band-gold:#D9A94F;
+  --ok:#1F7A4D;
+  --display:'Reem Kufi','Cairo','Segoe UI',Tahoma,sans-serif;
+  --body:'IBM Plex Sans Arabic','Cairo','Segoe UI',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#09111D; --surface:#0F1B2D; --ink:#E8ECF2; --muted:#9AA6B6; --line:#22314A;
+    --gold:#D9A94F; --gold-ink:#E3B866; --gold-soft:#2A2314;
+    --btn-bg:#D9A94F; --btn-fg:#0E1A2B;
+    --band:#0F1B2D; --band-line:#22314A; --ok:#58C08A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#09111D; --surface:#0F1B2D; --ink:#E8ECF2; --muted:#9AA6B6; --line:#22314A;
+  --gold:#D9A94F; --gold-ink:#E3B866; --gold-soft:#2A2314;
+  --btn-bg:#D9A94F; --btn-fg:#0E1A2B;
+  --band:#0F1B2D; --band-line:#22314A; --ok:#58C08A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;margin:0}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.35;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1080px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:13px;letter-spacing:.04em;color:var(--gold-ink);font-weight:600}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;display:flex;align-items:baseline;gap:8px;direction:ltr}
+.brand small{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted)}
+nav{margin-inline-start:auto;display:flex;gap:18px;align-items:center}
+nav a{text-decoration:none;font-size:14.5px;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 20px;border-radius:10px;border:1px solid var(--btn-bg);background:var(--btn-bg);color:var(--btn-fg);font:600 15.5px var(--body);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.sm{min-height:38px;padding:6px 14px;font-size:14px}
+.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+
+/* hero */
+.hero{padding-block:44px 56px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+.hero h1{font-size:clamp(30px,5.2vw,50px);margin-top:10px}
+.hero h1 em{font-style:normal;color:var(--gold-ink)}
+.hero p.lead{font-size:18px;color:var(--muted);margin-top:16px;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.hero .note{font-size:13.5px;color:var(--muted);margin-top:12px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+.facts li::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-inline-end:8px}
+
+/* invoice mock */
+.invoice{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px;box-shadow:0 18px 40px -28px rgba(14,26,43,.45);min-width:0}
+.inv-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px dashed var(--line);padding-bottom:12px}
+.inv-head b{font-family:var(--display);font-size:18px}
+.tag{font-size:12px;color:var(--gold-ink);background:var(--gold-soft);padding:2px 10px;border-radius:99px;font-weight:600;white-space:nowrap}
+.inv-meta{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;color:var(--muted);padding:10px 0}
+.inv-table{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.inv-table th{font-weight:500;font-size:12.5px;color:var(--muted);text-align:start;padding:6px 0;border-bottom:1px solid var(--line)}
+.inv-table td{padding:9px 0;border-bottom:1px solid var(--line)}
+.inv-table .num{text-align:end;white-space:nowrap}
+.inv-total{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 4px;font-size:15px}
+.inv-total b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.split{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.split h4{margin:0 0 8px;font:600 13px var(--body);color:var(--muted)}
+.split-row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:3px 0;font-variant-numeric:tabular-nums}
+.bar{display:flex;height:8px;border-radius:99px;overflow:hidden;margin-top:8px;background:var(--line)}
+.bar i{display:block;height:100%}
+.bar .c1{background:var(--ink)}
+.bar .c2{background:var(--gold)}
+
+/* sections */
+section{padding-block:56px}
+.sec-head{max-width:40em;margin-bottom:28px}
+.sec-head h2{font-size:clamp(24px,3.6vw,34px);margin-top:8px}
+.sec-head p{color:var(--muted);margin-top:10px}
+
+.truths{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-block:1px solid var(--line)}
+.truths>div{padding:22px 20px;min-width:0}
+.truths>div+div{border-inline-start:1px solid var(--line)}
+.truths b{display:block;font-family:var(--display);font-size:19px;margin-bottom:4px}
+.truths span{color:var(--muted);font-size:15px}
+
+.feat{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px}
+.feat article{padding:22px 0;border-top:1px solid var(--line);min-width:0}
+.feat h3{font-size:19px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.feat p{color:var(--muted);margin-top:6px;font-size:15.5px}
+.feat .on{font-family:var(--body);font-size:11.5px;font-weight:600;color:var(--gold-ink);background:var(--gold-soft);padding:1px 9px;border-radius:99px}
+
+/* day */
+.day{list-style:none;margin:0;padding:0;counter-reset:d;display:grid;gap:0}
+.day li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line);counter-increment:d}
+.day li::before{content:counter(d);font-family:var(--display);font-size:22px;color:var(--gold-ink);width:44px;height:44px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center}
+.day b{font-family:var(--display);font-size:18px;display:block}
+.day span{color:var(--muted);font-size:15.5px}
+
+/* band */
+.band{background:var(--band);color:var(--band-ink)}
+.band .eyebrow{color:var(--band-gold)}
+.band .sec-head p{color:var(--band-muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.two>div{border:1px solid var(--band-line);border-radius:14px;padding:22px;min-width:0}
+.two h3{font-size:20px;color:var(--band-gold)}
+.two ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;color:var(--band-ink);font-size:15.5px}
+.two li{padding-inline-start:18px;position:relative}
+.two li::before{content:"";position:absolute;inset-inline-start:0;top:.75em;width:8px;height:2px;background:var(--band-gold)}
+
+/* download */
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+.card h3{font-size:21px}
+.card .sub{color:var(--muted);font-size:14.5px;margin-top:2px}
+.card ol{margin:14px 0 18px;padding-inline-start:20px;color:var(--ink);font-size:15px;display:grid;gap:6px}
+.card ol li::marker{color:var(--gold-ink);font-weight:600}
+.trial{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px 28px;padding:16px 18px;border:1px dashed var(--gold);border-radius:12px;background:var(--gold-soft);font-size:15px}
+.trial b{font-family:var(--display)}
+
+/* faq */
+details{border-top:1px solid var(--line);padding:16px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-family:var(--display);font-size:18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:14px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold-ink);font-size:22px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px;max-width:46em}
+
+/* contact + footer */
+.contact{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;padding:26px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.contact h2{font-size:26px}
+.num-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.num-box code{font:600 20px var(--body);direction:ltr;user-select:all;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+footer{padding-block:28px 40px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+footer a{text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr;gap:30px}
+  .truths{grid-template-columns:1fr}
+  .truths>div+div{border-inline-start:0;border-top:1px solid var(--line)}
+  .feat,.two,.dl{grid-template-columns:1fr}
+  nav a.hide-s{display:none}
+}
+@media (max-width:480px){
+  .hero{padding-block:28px 40px}
+  section{padding-block:40px}
+  .top .wrap{gap:10px}
+  nav{gap:10px}
+  .btn{width:100%}
+  .top .btn,.num-box .btn{width:auto}
+}
+@media (prefers-reduced-motion: no-preference){
+  html{scroll-behavior:smooth}
+}
+</style>
+
+</head><body>
+<div dir="rtl" lang="ar">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">FLOWX <small>by XEDAN</small></a>
+    <nav aria-label="التنقل">
+      <a class="hide-s" href="#features">المميزات</a>
+      <a class="hide-s" href="#day">يوم شغل</a>
+      <a class="hide-s" href="#online">أوفلاين وأونلاين</a>
+      <a class="hide-s" href="#faq">أسئلة</a>
+      <a class="btn sm" href="#download">حمّل التجربة</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">مخازن ومبيعات وحسابات لتاجر الجملة</div>
+      <h1>فاتورتك ومخزنك وفلوسك، <em>على جهازك</em> ومن غير إنترنت.</h1>
+      <p class="lead">FLOWX Lite بيحسب لك الأرباح من التكلفة الفعلية، ويضبط عهدة المناديب، ويقفل الخزنة آخر اليوم. وفيه كتالوج أسعار وبوابة يشوف فيها التاجر حسابه لما تحب تشغّل الأونلاين.</p>
+      <div class="cta">
+        <a class="btn" href="#download">جرّبه 14 يوم مجاناً</a>
+        <a class="btn ghost" id="wa-hero" href="https://wa.me/201001845244?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%A3%D9%83%D8%AA%D8%B1%20%D8%B9%D9%86%20FLOWX%20Lite" rel="noopener">كلّمنا على واتساب</a>
+      </div>
+      <p class="note">ويندوز وأندرويد. من غير بطاقة ولا تسجيل.</p>
+      <ul class="facts">
+        <li>بياناتك على جهازك</li>
+        <li>بيشتغل من غير نت</li>
+        <li>من غير اشتراك سيرفر شهري</li>
+      </ul>
+    </div>
+
+    <div class="invoice" role="img" aria-label="مثال لفاتورة بيع بتقسيم الدفع بين كاش ومحفظة">
+      <div class="inv-head"><b>فاتورة بيع</b><span class="tag">مثال توضيحي</span></div>
+      <div class="inv-meta"><span>العميل: أحمد</span><span>المندوب: عربية 2</span></div>
+      <table class="inv-table">
+        <thead><tr><th>الصنف</th><th class="num">الكمية</th><th class="num">السعر</th><th class="num">الإجمالي</th></tr></thead>
+        <tbody>
+          <tr><td>زيت 1 لتر</td><td class="num">5 كرتونة</td><td class="num">420</td><td class="num">2,100</td></tr>
+          <tr><td>سكر 1 كجم</td><td class="num">3 كرتونة</td><td class="num">300</td><td class="num">900</td></tr>
+        </tbody>
+      </table>
+      <div class="inv-total"><span>الإجمالي</span><b>3,000 ج.م</b></div>
+      <div class="split">
+        <h4>تقسيم الدفع</h4>
+        <div class="split-row"><span>كاش</span><span>1,000</span></div>
+        <div class="split-row"><span>محفظة</span><span>2,000</span></div>
+        <div class="bar" aria-hidden="true"><i class="c1" style="width:33.3%"></i><i class="c2" style="width:66.7%"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="truths">
+    <div><b>أوفلاين أولاً</b><span>الشغل اليومي كله على جهازك. النت لو وقع، المحل ما يقفش.</span></div>
+    <div><b>بياناتك ملكك</b><span>مفيش سيرفر بيشوف فواتيرك. النسخ الاحتياطي في حسابك إنت.</span></div>
+    <div><b>تكلفة حقيقية</b><span>الربح بيتحسب من متوسط تكلفة الصنف الفعلي، مش من تقدير.</span></div>
+  </div>
+</div>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">المميزات</div>
+      <h2>كل اللي تاجر الجملة بيسأل عنه آخر اليوم</h2>
+    </div>
+    <div class="feat">
+      <article><h3>فاتورة بيع وشراء بسرعة</h3><p>بتسجّل الفاتورة بالكرتونة والقطعة، وآخر سعر بعته للعميل بيظهر قدامك وإنت بتسعّر.</p></article>
+      <article><h3>تقسيم الدفع</h3><p>العميل دفع كاش وجزء على المحفظة؟ بتقسّمها في كارت واحد، والباقي بيروح للدُرج. نفس الكلام في التحصيل والمصاريف.</p></article>
+      <article><h3>مخزن مضبوط</h3><p>كارت لكل صنف بكل حركة ورصيده، جرد بالباركود، وإعادة حساب متوسط التكلفة. وبيقترح عليك إيه تشتريه قبل ما يخلص.</p></article>
+      <article><h3>مناديب وعهدة</h3><p>بتحوّل بضاعة لعربية المندوب بملاحظة، هو بيبيع من عهدته، وآخر اليوم تقرير العهدة يقولك مع كل واحد إيه.</p></article>
+      <article><h3>فلوس واضحة</h3><p>قفل خزنة يومي بتتنقل فيه بين الأيام، سيولة محافظك كلها، شيكات بتواريخ استحقاقها، ومصاريف بالفئات وإيرادات أخرى.</p></article>
+      <article><h3>أرباح وقفل شهر</h3><p>الأرباح من التكلفة الفعلية بعد المصاريف، وقفل الشهر بيثبّت الأرقام وتبدأ شهر نضيف.</p></article>
+      <article><h3>أهداف وشرائح كميات</h3><p>هدف شراء لكل عميل وبتتابعه، وسعر بيقل تلقائي لما يزوّد الكمية، وتقرير هدايا بيقولك صرفت كام لكل عميل.</p></article>
+      <article><h3>تقارير PDF وExcel</h3><p>أي تقرير بيتطلّع PDF بلوجو محلك واسمه، أو Excel تشتغل عليه. وكارت الصنف بقيمة المخزون.</p></article>
+      <article><h3>كتالوج الأسعار <span class="on">بالإنترنت</span></h3><p>رابط واحد لكل أصنافك بأسعارها وعليه لوجو محلك، يتبعت للعميل على واتساب ويتحدّث من التطبيق.</p></article>
+      <article><h3>بوابة التاجر <span class="on">بالإنترنت</span></h3><p>كل عميل بيدخل بكلمة سر ويشوف حسابه هو بس، وبيتحدّث لوحده. والطلب اللي يبعته بينزل عندك مسودة.</p></article>
+      <article><h3>نسخ احتياطي ومزامنة</h3><p>على جوجل درايف بحسابك لما النت يكون موجود، وبملفات واتساب أو بلوتوث لما يكون مش موجود. الدمج بيضيف الجديد بس.</p></article>
+      <article><h3>طباعة حرارية</h3><p>على أندرويد بتطبع الإيصال على طابعة حرارية بلوتوث.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="day" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">يوم شغل</div>
+      <h2>يوم تاجر جملة بالترتيب</h2>
+      <p>الخطوات دي بتحصل كل يوم تقريباً. التطبيق بيشيل من عليك الورقة والحساب في كل واحدة.</p>
+    </div>
+    <ol class="day">
+      <li><div><b>الطلبات بتنزل مسودات</b><span>من الكتالوج أو من مكالمة. المسودة مالهاش أي تأثير على المخزن أو الأرصدة.</span></div></li>
+      <li><div><b>قائمة تحميل واحدة</b><span>إجمالي كل صنف من كل الطلبات بالكرتونة والقطعة، وتفاصيل كل عميل، بتتطبع PDF.</span></div></li>
+      <li><div><b>تحويل العهدة للمندوب</b><span>البضاعة بتتحسب مع المندوب، مش مع المخزن الرئيسي.</span></div></li>
+      <li><div><b>بيع وتحصيل</b><span>فواتير وتحصيل بتقسيم الدفع على الكاش والمحافظ.</span></div></li>
+      <li><div><b>قفل الخزنة وتقرير العهدة</b><span>تشوف الداخل والخارج وتقفل اليوم، وتعرف كل مندوب حصّل كام وباقي معاه إيه.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="online" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">أوفلاين وأونلاين</div>
+      <h2>أوفلاين بالكامل، وأونلاين لما تحتاجه</h2>
+      <p>أي برنامج بيشتغل أوفلاين بس بيفضل كده. FLOWX Lite بيشتغل أوفلاين، ولما النت يبقى موجود بيفتح لك حاجات جديدة.</p>
+    </div>
+    <div class="two">
+      <div>
+        <h3>من غير إنترنت</h3>
+        <ul>
+          <li>كل العمليات اليومية والتقارير.</li>
+          <li>الطباعة والتصدير PDF وExcel.</li>
+          <li>مزامنة بين الأجهزة بملف يتبعت واتساب أو بلوتوث، والدمج بيضيف الناقص بس.</li>
+          <li>شغل المندوب بيوصلك آخر اليوم بملف واحد.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>مع إنترنت</h3>
+        <ul>
+          <li>نسخة احتياطية ومزامنة تلقائية على جوجل درايف بحسابك.</li>
+          <li>كتالوج أسعار برابط، بلوجو محلك.</li>
+          <li>بوابة التاجر بحسابه، وبتتحدّث لوحدها.</li>
+          <li>استيراد الطلب من الكتالوج كمسودة.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">التحميل</div>
+      <h2>حمّل النسخة التجريبية</h2>
+      <p>14 يوم تجربة بكل المميزات. لو خلصت من غير تفعيل، التطبيق بيفضل شغّال للقراءة والتصدير بس، وبياناتك محفوظة.</p>
+    </div>
+    <div class="dl">
+      <div class="card">
+        <h3>ويندوز</h3>
+        <div class="sub">ويندوز 10 أو أحدث</div>
+        <ol>
+          <li>حمّل الملف وفُكّه لو كان مضغوط.</li>
+          <li>شغّل التطبيق. لو ظهرت شاشة زرقاء "Windows protected your PC" اضغط <b>More info</b>.</li>
+          <li>اضغط <b>Run anyway</b>.</li>
+        </ol>
+        <a class="btn" id="dl-win" href="#download" aria-disabled="true">تحميل لويندوز</a>
+      </div>
+      <div class="card">
+        <h3>أندرويد</h3>
+        <div class="sub">ملف APK مباشر</div>
+        <ol>
+          <li>حمّل ملف APK من الزر تحت.</li>
+          <li>لو طلب الإذن، اضغط <b>الإعدادات</b> وفعّل "السماح من هذا المصدر".</li>
+          <li>ارجع واضغط <b>تثبيت</b>.</li>
+        </ol>
+        <a class="btn" id="dl-and" href="#download" aria-disabled="true">تحميل لأندرويد</a>
+      </div>
+    </div>
+    <p id="dl-note" class="sub" style="color:var(--muted);font-size:14px;margin-top:14px" hidden>روابط التحميل هتتفعّل قريباً. كلّمنا على واتساب وهنبعتلك الملف.</p>
+    <div class="trial">
+      <span><b>التفعيل:</b> بعد التجربة بتبعتلنا كود جهازك وبنبعتلك مفتاح التفعيل.</span>
+      <span><b>الاشتراك والأسعار:</b> كلّمنا على واتساب.</span>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">أسئلة</div>
+      <h2>الأسئلة اللي بتتسأل</h2>
+    </div>
+    <details><summary>هل بياناتي بتروح لحد؟</summary><p>لأ. بيانات محلك بتتخزن على جهازك. لو فعّلت جوجل درايف، النسخة بتتحفظ في درايفك إنت. ولو فعّلت الكتالوج والبوابة، الملفات بتتحط على حساب Supabase الخاص بيك.</p></details>
+    <details><summary>محتاج إنترنت؟</summary><p>الشغل اليومي لأ. الإنترنت بس للكتالوج والبوابة والمزامنة على درايف. ولو مفيش نت، المزامنة بتتم بملف يتبعت واتساب أو بلوتوث.</p></details>
+    <details><summary>يحصل إيه بعد الـ14 يوم؟</summary><p>لو ما فعّلتش، التطبيق بيفضل شغّال للقراءة والتصدير: تشوف بياناتك وتطلّعها نسخة. مش هتقدر تسجّل عمليات جديدة لحد ما تفعّل. بياناتك مش بتتمسح.</p></details>
+    <details><summary>عندي مناديب، هيشتغلوا إزاي؟</summary><p>كل مندوب بحساب على جهازه. بيبيع ويحصّل من عهدته، وبيبعتلك شغل اليوم بملف أو بالمزامنة. بتشوف مبيعاته وتحصيله وعهدته في مكان واحد.</p></details>
+    <details><summary>هل في طباعة حرارية؟</summary><p>أيوه، على أندرويد بطابعة حرارية بلوتوث. وكل التقارير بتطلع PDF.</p></details>
+    <details><summary>لو غيّرت الجهاز؟</summary><p>بتاخد نسخة احتياطية من الجهاز القديم وتستعيدها على الجديد. كود الجهاز بيتغيّر، فبتبعتلنا الكود الجديد وبنفعّل لك.</p></details>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="contact" id="contact">
+      <div>
+        <h2>عايز تجرّب أو تسأل؟</h2>
+        <p style="color:var(--muted);margin-top:6px">كلّمنا على واتساب وهنرد عليك.</p>
+      </div>
+      <div class="num-box">
+        <code id="wa-num">01001845244</code>
+        <button class="btn ghost sm" type="button" id="copy-num">نسخ الرقم</button>
+        <a class="btn sm" id="wa-main" href="https://wa.me/201001845244" rel="noopener">واتساب</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© XEDAN. جميع الحقوق محفوظة.</span>
+    <a href="privacy.html">سياسة الخصوصية</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+/* روابط التحميل: حط رابط ملف ويندوز وأندرويد (من GitHub Releases) هنا. الفاضي بيتعرض "قريباً". */
+var LINKS = { windows: '', android: '' };
+
+(function(){
+  var win = document.getElementById('dl-win');
+  var and = document.getElementById('dl-and');
+  var note = document.getElementById('dl-note');
+  var missing = false;
+  [[win, LINKS.windows], [and, LINKS.android]].forEach(function(p){
+    if (p[1]) { p[0].href = p[1]; p[0].removeAttribute('aria-disabled'); }
+    else { missing = true; p[0].addEventListener('click', function(e){ e.preventDefault(); }); }
+  });
+  if (missing && note) note.hidden = false;
+
+  var btn = document.getElementById('copy-num');
+  var num = document.getElementById('wa-num');
+  if (btn && num) btn.addEventListener('click', function(){
+    var done = function(){ btn.textContent = 'اتنسخ'; setTimeout(function(){ btn.textContent = 'نسخ الرقم'; }, 1800); };
+    try {
+      navigator.clipboard.writeText('01001845244').then(done, function(){ sel(); });
+    } catch (e) { sel(); }
+    function sel(){
+      try { var r = document.createRange(); r.selectNodeContents(num); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+    }
+  });
+})();
+</script>
+
+</body></html>
