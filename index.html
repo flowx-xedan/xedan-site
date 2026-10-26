@@ -433,7 +433,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         <p style="color:var(--muted);margin-top:6px">كلّمنا على واتساب وهنرد عليك.</p>
       </div>
       <div class="num-box">
-        <code id="wa-num">01001845244</code>
+        <code id="wa-num" dir="ltr">+201001845244</code>
         <button class="btn ghost sm" type="button" id="copy-num">نسخ الرقم</button>
         <a class="btn sm" id="wa-main" href="https://wa.me/201001845244" rel="noopener">واتساب</a>
       </div>
@@ -471,7 +471,7 @@ var LINKS = { windows: '', android: '' };
   if (btn && num) btn.addEventListener('click', function(){
     var done = function(){ btn.textContent = 'اتنسخ'; setTimeout(function(){ btn.textContent = 'نسخ الرقم'; }, 1800); };
     try {
-      navigator.clipboard.writeText('01001845244').then(done, function(){ sel(); });
+      navigator.clipboard.writeText('+201001845244').then(done, function(){ sel(); });
     } catch (e) { sel(); }
     function sel(){
       try { var r = document.createRange(); r.selectNodeContents(num); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
