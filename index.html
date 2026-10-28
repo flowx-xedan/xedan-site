@@ -121,6 +121,14 @@ section{padding-block:56px}
 .day span{color:var(--muted);font-size:15.5px}
 
 /* band */
+.smart{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.smart .card h3{display:flex;gap:10px;align-items:center}
+.smart .card .k{font-family:var(--body);font-size:12px;font-weight:600;color:var(--gold-ink);background:var(--gold-soft);padding:1px 10px;border-radius:99px}
+.smart ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px;font-size:15.5px}
+.smart li{padding-inline-start:18px;position:relative;color:var(--ink)}
+.smart li::before{content:"";position:absolute;inset-inline-start:0;top:.75em;width:8px;height:2px;background:var(--gold-ink)}
+.smart li span{color:var(--muted)}
+.smart-foot{margin-top:18px;color:var(--muted);font-size:14.5px}
 .band{background:var(--band);color:var(--band-ink)}
 .band .eyebrow{color:var(--band-gold)}
 .band .sec-head p{color:var(--band-muted)}
@@ -163,7 +171,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
   .hero .wrap{grid-template-columns:1fr;gap:30px}
   .truths{grid-template-columns:1fr}
   .truths>div+div{border-inline-start:0;border-top:1px solid var(--line)}
-  .feat,.two,.dl{grid-template-columns:1fr}
+  .feat,.two,.dl,.smart{grid-template-columns:1fr}
   nav a.hide-s{display:none}
 }
 @media (max-width:480px){
@@ -330,6 +338,44 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <article><h3>نسخ احتياطي ومزامنة</h3><p>على جوجل درايف بحسابك لما النت يكون موجود، وبملفات واتساب أو بلوتوث لما يكون مش موجود. الدمج بيضيف الجديد بس.</p></article>
       <article><h3>طباعة حرارية</h3><p>على أندرويد بتطبع الإيصال على طابعة حرارية بلوتوث.</p></article>
     </div>
+  </div>
+</section>
+
+<section id="smart" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">بيفتكر بدالك</div>
+      <h2>الفاتورة والعميل والمندوب: التطبيق بيراجع معاك</h2>
+      <p>مش بس بتسجّل. التطبيق بيقولك مين وقف يشتري، ومين عليه فلوس متأخرة، وإيه اللي العميل بيطلبه عادةً، ومندوبك وصل لهدفه ولا لأ.</p>
+    </div>
+    <div class="smart">
+      <div class="card">
+        <h3>ذكاء الفاتورة</h3>
+        <ul>
+          <li><b>أصناف العميل المعتادة:</b> <span>من آخر 8 فواتير بيع ليه، بتضغط الصنف يتضاف، وبيظهر كام مرة طلبه. الأصناف المتاحة في المخزن بس.</span></li>
+          <li><b>آخر سعر للعميل:</b> <span>قدامك في فاتورة البيع وعروض الأسعار، وبضغطة تستخدمه. وفي الشراء بتشوف آخر سعر اشتريت بيه من المورد.</span></li>
+          <li><b>طلب ناقص:</b> <span>العميل طلب صنف مش عندك؟ زرار واحد يسجّله، وتقرير مبيعات ضايعة يقولك إيه اللي بتخسره.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>العملاء <span class="k">CRM</span></h3>
+        <ul>
+          <li><b>عملاء وقفوا يشتروا:</b> <span>اللي ما اشتروش من عدد أيام تحدده، أو عليهم دين متأخر فوق حد معين. وتقدر تأجّل التنبيه.</span></li>
+          <li><b>تذكير التحصيل:</b> <span>متأخر وبتاع النهارده والجاي، وإشعار على الموبايل.</span></li>
+          <li><b>زيارات النهارده:</b> <span>مين بيطلب عادةً كل كام يوم، ومسار الزيارات على خرائط جوجل.</span></li>
+          <li><b>هدف شهري للعميل:</b> <span>لو حققه ياخد خصم نسبة بتحددها، وإقرار PDF يتبعت له.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>المناديب: أهداف وعمولات</h3>
+        <ul>
+          <li><b>هدف لكل مندوب:</b> <span>مبيعات شهرية، ومرتب أساسي.</span></li>
+          <li><b>عمولتين:</b> <span>نسبة على المبيعات اللي فوق حد تحدده، ونسبة على التحصيل.</span></li>
+          <li><b>الإجمالي بيتحسب لوحده:</b> <span>المرتب + العمولة، في تقرير PDF لكل مندوب جاهز للمراجعة والتسليم.</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="smart-foot">كله بيتحسب من فواتيرك أنت على جهازك، من غير اشتراك إضافي ولا ذكاء اصطناعي بيخمّن.</p>
   </div>
 </section>
 
